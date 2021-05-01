@@ -14,32 +14,28 @@
 motion_scale = Vector2( 0.1, 0.1 )
 
 [node name="Sprite" type="Sprite" parent="Background/Sky"]
-position = Vector2( 933.447, 196.369 )
 scale = Vector2( 0.863854, 0.863854 )
 texture = ExtResource( 5 )
 
 [node name="Stage" type="StaticBody2D" parent="."]
 
 [node name="Sprite" type="Sprite" parent="Stage"]
-position = Vector2( 960, 540 )
 scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 1 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Stage"]
+position = Vector2( -960, -540 )
 polygon = PoolVector2Array( -0.000305176, 665.999, 184.999, 842.999, 1799, 843.999, 1799, 471, 1884, 471, 1884, 843.999, 1921, 843.999, 1920, 1081, -1.00031, 1080 )
 
 [node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Stage"]
-position = Vector2( 960, 540 )
 scale = Vector2( 0.5, 0.5 )
 polygon = PoolVector2Array( 930, -668, -86, -668, -86, -756, 930, -756 )
 
 [node name="CollisionPolygon2D3" type="CollisionPolygon2D" parent="Stage"]
-position = Vector2( 960, 540 )
 scale = Vector2( 0.5, 0.5 )
 polygon = PoolVector2Array( 1334, 260, 1202, 260, 1202, -412, 1334, -412 )
 
 [node name="CollisionPolygon2D5" type="CollisionPolygon2D" parent="Stage"]
-position = Vector2( 960, 540 )
 scale = Vector2( 0.5, 0.5 )
 polygon = PoolVector2Array( 178, 252, -290, 252, -290, 176, 178, 176 )
 
@@ -68,6 +64,6 @@ motion_scale = Vector2( 2, 2 )
 
 [node name="Sprite" type="Sprite" parent="Foreground/Cloud"]
 modulate = Color( 1, 1, 1, 0.4 )
-position = Vector2( 1290.88, 1508.11 )
+position = Vector2( -17.9593, 388.372 )
 scale = Vector2( 0.418756, 0.418756 )
 texture = ExtResource( 4 )

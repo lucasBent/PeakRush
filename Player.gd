@@ -8,7 +8,7 @@ export var friction = 0.91
 export var x_speed = 45
 export var max_x_speed = 450
 export var max_y_speed = 1200
-export var start_position = Vector2(512, 64)
+export var start_position = Vector2(-448, -476)
 export var snap = false
 var movement = Vector2(0, 0)
 var land_timer = 0
@@ -87,7 +87,7 @@ func _process(_delta):
 	update_animation()
 	if movement.x == 0: motion.x = 0
 	
-	if position.y > 1500:
+	if position.y > 1000:
 		position = start_position
 		motion.x = 0
 		motion.y = 0
