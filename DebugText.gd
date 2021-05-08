@@ -19,4 +19,5 @@ func _process(delta):
 	text += "\nPlayer next to wall: " + str($"/root/Main/Player".next_to_wall())
 	text += "\nceiling_cling_timer: " + str($"/root/Main/Player".ceiling_cling_timer)
 	text += "\nceiling_clinging: " + str($"/root/Main/Player".ceiling_clinging)
+	text += "\nceiling_cling_buffer: " + str($"/root/Main/Player".ceiling_cling_buffer)
 	text += "\nwall_hit_timer: " + str($"/root/Main/Player".wall_hit_timer)

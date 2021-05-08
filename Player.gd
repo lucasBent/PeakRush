@@ -13,20 +13,23 @@ export var snap = false
 var movement = Vector2(0, 0)
 var land_timer = 0
 var wall_hit_timer = 0
-var ceiling_cling_timer = 20
+var ceiling_cling_timer = 15
+var ceiling_cling_buffer = 0
 var blink_timer = 0
 var jumping = false
 var wall_jumping = false
 var ceiling_clinging = false
+var ceiling_fall = false
 var previous = Vector2(0, 0)
 
 func _ready():
 	position = start_position
 
 func _physics_process(delta):
-	if ceiling_clinging:
+	if (not ceiling_clinging or (ceiling_clinging and not ceiling_cling_timer > 0)) and ceiling_cling_buffer > 0: ceiling_cling_buffer -= 1
+	if ceiling_clinging and ceiling_cling_timer > 0:
 		ceiling_cling_timer -= 1
-		if not ceiling_cling_timer > 0: ceiling_clinging = false
+		if not ceiling_cling_timer > 0 and not ceiling_cling_buffer > 0: ceiling_clinging = false
 	if land_timer != 0: land_timer -= 1
 	if wall_hit_timer != 0: wall_hit_timer -= 1
 	if blink_timer != 0: blink_timer -= 1
@@ -54,8 +57,10 @@ func _physics_process(delta):
 
 func _process(_delta):
 	if is_on_floor():
-		ceiling_cling_timer = 20
+		ceiling_fall = false
+		ceiling_cling_timer = 15
 		ceiling_clinging = false
+		ceiling_cling_buffer = 0
 		motion.y = 0
 		jumping = false
 		wall_jumping = false
@@ -76,12 +81,23 @@ func _process(_delta):
 		else: motion.x = max_x_speed
 		
 	cap_motion()
-	var snap_vector = Vector2.DOWN * 16 if snap else Vector2()
+	var snap_vector = Vector2(0, 200) if snap else Vector2()
+	print(snap_vector)
 	previous = motion
 	
-	if on_ceiling() and Input.is_action_pressed("ui_up") and ceiling_cling_timer == 20: ceiling_clinging = true
-	if not on_ceiling() or not Input.is_action_pressed("ui_up"): ceiling_clinging = false
+	if on_ceiling() and Input.is_action_pressed("ui_up") and ceiling_cling_timer > 0:
+		ceiling_clinging = true
+		ceiling_cling_buffer = 10
+	if not on_ceiling() or (not Input.is_action_pressed("ui_up") and not ceiling_cling_buffer > 0) or (not ceiling_cling_buffer > 0 and not ceiling_cling_timer > 0):
+		ceiling_clinging = false
+		ceiling_cling_buffer = 0
 	if ceiling_clinging: motion.y = 0
+	if ceiling_clinging and not Input.is_action_pressed("ui_up"): ceiling_cling_timer = 0
+	if ceiling_clinging and Input.is_action_pressed("ui_down"):
+		ceiling_fall = true
+		motion.y = 800
+		ceiling_clinging = false
+		ceiling_cling_buffer = 0
 	movement = move_and_slide_with_snap(motion, snap_vector, Vector2.UP, true, 4, 0.9, false)
 	motion.y = movement.y
 	update_animation()
@@ -106,8 +122,12 @@ func cap_motion():
 
 func update_animation():
 	if is_on_floor():
-		if land_timer > 0: $AnimationPlayer.play("land")
-		elif wall_hit_timer > 0: $AnimationPlayer.play("wall hit")
+		if land_timer > 0:
+			$AnimationPlayer.play("land")
+			$AnimationPlayer.advance(0)
+		elif wall_hit_timer > 0:
+			$AnimationPlayer.play("wall hit")
+			$AnimationPlayer.advance(0)
 		else:
 			if movement.x == 0: $AnimationPlayer.play("idle")
 			elif abs(motion.x) < 30:
@@ -136,6 +156,7 @@ func update_animation():
 			if (Input.is_action_pressed("ui_left") or Input.is_action_pressed("ui_right")) and next_to_wall():
 				if not $AnimationPlayer.current_animation == "wall slide": motion.y *= 0.4
 				$AnimationPlayer.play("wall slide")
+			elif ceiling_fall: $AnimationPlayer.play("ceiling fall")
 			else: $AnimationPlayer.play("fall")
 		elif motion.y < -30: $AnimationPlayer.play("jump")
 		if ceiling_clinging:

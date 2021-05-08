@@ -1,10 +1,28 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=12 format=2]
 
-[ext_resource path="res://test level.png" type="Texture" id=1]
+[ext_resource path="res://test level 2.png" type="Texture" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://DebugText.gd" type="Script" id=3]
 [ext_resource path="res://cloud.png" type="Texture" id=4]
 [ext_resource path="res://space bg.jpg" type="Texture" id=5]
+
+[sub_resource type="ConvexPolygonShape2D" id=1]
+points = PoolVector2Array( -1, 3, 180, 175, -1, 200 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 1150.31, 100.504 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 42.1052, 190.881 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 118.126, 20.0417 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 255.859, 22.3232 )
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 32.0615, 170.016 )
 
 [node name="Main" type="Node2D"]
 
@@ -14,30 +32,40 @@
 motion_scale = Vector2( 0.1, 0.1 )
 
 [node name="Sprite" type="Sprite" parent="Background/Sky"]
-scale = Vector2( 0.863854, 0.863854 )
+position = Vector2( 289.966, 21.0988 )
+scale = Vector2( 1.55844, 1.55844 )
 texture = ExtResource( 5 )
 
 [node name="Stage" type="StaticBody2D" parent="."]
 
 [node name="Sprite" type="Sprite" parent="Stage"]
-scale = Vector2( 0.5, 0.5 )
+position = Vector2( 191.508, -141.111 )
+scale = Vector2( 0.3, 0.3 )
 texture = ExtResource( 1 )
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Stage"]
-position = Vector2( -960, -540 )
-polygon = PoolVector2Array( -0.000305176, 665.999, 184.999, 842.999, 1799, 843.999, 1799, 471, 1884, 471, 1884, 843.999, 1921, 843.999, 1920, 1081, -1.00031, 1080 )
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Stage"]
+position = Vector2( -957.911, 131.229 )
+shape = SubResource( 1 )
 
-[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Stage"]
-scale = Vector2( 0.5, 0.5 )
-polygon = PoolVector2Array( 930, -668, -86, -668, -86, -756, 930, -756 )
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Stage"]
+position = Vector2( 191.51, 402.144 )
+shape = SubResource( 2 )
 
-[node name="CollisionPolygon2D3" type="CollisionPolygon2D" parent="Stage"]
-scale = Vector2( 0.5, 0.5 )
-polygon = PoolVector2Array( 1334, 260, 1202, 260, 1202, -412, 1334, -412 )
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Stage"]
+position = Vector2( 887.034, 115.106 )
+shape = SubResource( 3 )
 
-[node name="CollisionPolygon2D5" type="CollisionPolygon2D" parent="Stage"]
-scale = Vector2( 0.5, 0.5 )
-polygon = PoolVector2Array( 178, 252, -290, 252, -290, 176, 178, 176 )
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Stage"]
+position = Vector2( -27.5772, 100.763 )
+shape = SubResource( 4 )
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="Stage"]
+position = Vector2( 211.966, -365.468 )
+shape = SubResource( 5 )
+
+[node name="CollisionShape2D6" type="CollisionShape2D" parent="Stage"]
+position = Vector2( 639, -45.5 )
+shape = SubResource( 6 )
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 
