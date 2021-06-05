@@ -17,6 +17,7 @@ func _process(delta):
 	text += "\nPlayer.motion.y: " + str($"/root/Main/Player".motion.y)
 	text += "\nPlayer animation: " + $"/root/Main/Player".get_node("AnimationPlayer").current_animation
 	text += "\nPlayer next to wall: " + str($"/root/Main/Player".next_to_wall())
+	text += "\nland_timer: " + str($"/root/Main/Player".land_timer)
 	text += "\nceiling_cling_timer: " + str($"/root/Main/Player".ceiling_cling_timer)
 	text += "\nceiling_clinging: " + str($"/root/Main/Player".ceiling_clinging)
 	text += "\nceiling_cling_buffer: " + str($"/root/Main/Player".ceiling_cling_buffer)

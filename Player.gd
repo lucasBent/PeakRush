@@ -64,8 +64,10 @@ func _process(_delta):
 		motion.y = 0
 		jumping = false
 		wall_jumping = false
-		if previous.y > 800: land_timer = 5
-		if abs(previous.x) > x_speed * 6 and abs(motion.x) < x_speed: wall_hit_timer = 5
+		if previous.y > 800: 
+			land_timer = 5
+			$GroundHitParticles.restart()
+		if abs(previous.x) > x_speed * 8 and abs(motion.x) < x_speed: wall_hit_timer = 5
 		snap = true
 		if Input.is_action_pressed("ui_up") and snap and land_timer == 0 and wall_hit_timer == 0:
 			jumping = true
@@ -129,42 +131,65 @@ func update_animation():
 			$AnimationPlayer.play("wall hit")
 			$AnimationPlayer.advance(0)
 		else:
-			if movement.x == 0: $AnimationPlayer.play("idle")
+			if movement.x == 0:
+				$AnimationPlayer.play("idle")
+				$AnimationPlayer.advance(0)
 			elif abs(motion.x) < 30:
 				$AnimationPlayer.play("idle")
+				$AnimationPlayer.advance(0)
 			elif not is_on_wall() and not (Input.is_action_pressed("ui_right") or Input.is_action_pressed("ui_left")):
 				walk_or_run()
 			
 			if Input.is_action_pressed("ui_right"):
-				if motion.x < -200: $AnimationPlayer.play("skid")
-				elif $AnimationPlayer.current_animation == "skid" and motion.x > -30 and Input.is_action_pressed("ui_left"): $AnimationPlayer.play("skid")
+				if motion.x < -200:
+					$AnimationPlayer.play("skid")
+					$AnimationPlayer.advance(0)
+				elif $AnimationPlayer.current_animation == "skid" and motion.x > -30 and Input.is_action_pressed("ui_left"):
+					$AnimationPlayer.play("skid")
+					$AnimationPlayer.advance(0)
 				elif not is_on_wall(): walk_or_run()
 				if $Sprite.scale.x < 0 and not Input.is_action_pressed("ui_left") and $AnimationPlayer.current_animation != "skid":
 					$Sprite.scale.x *= -1
 			
 			if Input.is_action_pressed("ui_left"):
-				if motion.x > 200: $AnimationPlayer.play("skid")
-				elif $AnimationPlayer.current_animation == "skid" and motion.x < 30 and Input.is_action_pressed("ui_right"): $AnimationPlayer.play("skid")
+				if motion.x > 200:
+					$AnimationPlayer.play("skid")
+					$AnimationPlayer.advance(0)
+				elif $AnimationPlayer.current_animation == "skid" and motion.x < 30 and Input.is_action_pressed("ui_right"):
+					$AnimationPlayer.play("skid")
+					$AnimationPlayer.advance(0)
 				elif not is_on_wall(): walk_or_run()
 				if $Sprite.scale.x > 0 and not Input.is_action_pressed("ui_right") and $AnimationPlayer.current_animation != "skid":
 					$Sprite.scale.x *= -1
 			
 			if Input.is_action_pressed("ui_left") and Input.is_action_pressed("ui_right") and $AnimationPlayer.current_animation != "skid":
 				$AnimationPlayer.play("idle")
+				$AnimationPlayer.advance(0)
 	else:
 		if motion.y > 30:
 			if (Input.is_action_pressed("ui_left") or Input.is_action_pressed("ui_right")) and next_to_wall():
 				if not $AnimationPlayer.current_animation == "wall slide": motion.y *= 0.4
 				$AnimationPlayer.play("wall slide")
-			elif ceiling_fall: $AnimationPlayer.play("ceiling fall")
-			else: $AnimationPlayer.play("fall")
-		elif motion.y < -30: $AnimationPlayer.play("jump")
+				$AnimationPlayer.advance(0)
+			elif ceiling_fall:
+				$AnimationPlayer.play("ceiling fall")
+				$AnimationPlayer.advance(0)
+			else:
+				$AnimationPlayer.play("fall")
+				$AnimationPlayer.advance(0)
+		elif motion.y < -30:
+			$AnimationPlayer.play("jump")
+			$AnimationPlayer.advance(0)
 		if ceiling_clinging:
-			$AnimationPlayer.play("ceiling", -1, 3)
+			$AnimationPlayer.play("ceiling", -1, 2.5)
+			$AnimationPlayer.advance(0)
 	if ($AnimationPlayer.current_animation == "idle" and round(rand_range(0, 500)) == 87) and blink_timer == 0:
 		blink_timer = 2
 		$AnimationPlayer.play("blink")
-	if blink_timer > 0 and ($AnimationPlayer.current_animation == "idle" or $AnimationPlayer.current_animation == "blink"): $AnimationPlayer.play("blink")
+		$AnimationPlayer.advance(0)
+	if blink_timer > 0 and ($AnimationPlayer.current_animation == "idle" or $AnimationPlayer.current_animation == "blink"):
+		$AnimationPlayer.play("blink")
+		$AnimationPlayer.advance(0)
 	if motion.x > 0 and $Sprite.scale.x < 0: $Sprite.scale.x *= -1
 	if motion.x < 0 and $Sprite.scale.x > 0: $Sprite.scale.x *= -1
 
@@ -179,13 +204,16 @@ func on_ceiling():
 
 func walk_or_run():
 	var current_pos = 0
-	if abs(motion.x) < 300:
-		if $AnimationPlayer.get_current_animation() == "run":
-			 current_pos = $AnimationPlayer.get_current_animation_position()
-		$AnimationPlayer.play("walk", -1, abs(motion.x/max_x_speed)+0.3)
-		if current_pos != 0: $AnimationPlayer.advance(current_pos)
-	else:
-		if $AnimationPlayer.get_current_animation() == "walk":
-			 current_pos = $AnimationPlayer.get_current_animation_position()
-		$AnimationPlayer.play("run", -1, abs(motion.x/max_x_speed))
-		if current_pos != 0: $AnimationPlayer.advance(current_pos)
+	if not land_timer > 0:
+		if abs(motion.x) < 300:
+			if $AnimationPlayer.get_current_animation() == "run":
+				 current_pos = $AnimationPlayer.get_current_animation_position()
+			$AnimationPlayer.play("walk", -1, abs(motion.x/max_x_speed)+0.3)
+			$AnimationPlayer.advance(0)
+			if current_pos != 0: $AnimationPlayer.advance(current_pos)
+		else:
+			if $AnimationPlayer.get_current_animation() == "walk":
+				 current_pos = $AnimationPlayer.get_current_animation_position()
+			$AnimationPlayer.play("run", -1, abs(motion.x/max_x_speed))
+			$AnimationPlayer.advance(0)
+			if current_pos != 0: $AnimationPlayer.advance(current_pos)
