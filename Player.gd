@@ -84,7 +84,6 @@ func _process(_delta):
 		
 	cap_motion()
 	var snap_vector = Vector2(0, 200) if snap else Vector2()
-	print(snap_vector)
 	previous = motion
 	
 	if on_ceiling() and Input.is_action_pressed("ui_up") and ceiling_cling_timer > 0:
