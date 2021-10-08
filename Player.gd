@@ -73,7 +73,7 @@ func _process(_delta):
 			var jump_multiplier = abs(motion.x) / 415
 			if jump_multiplier < 1: jump_multiplier = 1
 			motion.y = -jump_height * jump_multiplier
-	elif Input.is_action_pressed("ui_up") and $AnimationPlayer.current_animation == "wall slide" and not (Input.is_action_pressed("ui_right") and Input.is_action_pressed("ui_left")):
+	elif Input.is_action_pressed("ui_up") and $AnimationPlayer.current_animation == "wall slide" and ((Input.is_action_pressed("ui_right") and next_to_wall_right()) or (Input.is_action_pressed("ui_left") and next_to_wall_left())):
 		wall_jumping = true
 		snap = false
 		motion.y = -1.25 * jump_height
@@ -82,7 +82,6 @@ func _process(_delta):
 		
 	cap_motion()
 	var snap_vector = Vector2(0, 200) if snap else Vector2()
-	print(snap_vector)
 	previous = motion
 	
 	if on_ceiling() and Input.is_action_pressed("ui_up") and ceiling_cling_timer > 0:
@@ -172,6 +171,14 @@ func update_animation():
 func next_to_wall():
 	var test_transform = Transform2D(0.0, position)
 	return test_move(test_transform, Vector2(1, 0)) or test_move(test_transform, Vector2(-1, 0))
+
+func next_to_wall_right():
+	var test_transform = Transform2D(0.0, position)
+	return test_move(test_transform, Vector2(1, 0))
+	
+func next_to_wall_left():
+	var test_transform = Transform2D(0.0, position)
+	return test_move(test_transform, Vector2(-1, 0))
 	
 func on_ceiling():
 	var test_transform = Transform2D(0.0, position)
