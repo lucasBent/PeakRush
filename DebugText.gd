@@ -12,13 +12,20 @@ func _physics_process(_delta):
 		get_tree().paused = false
 
 func _process(delta):
-	if not delta == 0: text = "fps: " + str(1/delta)
-	text += "\nPlayer.motion.x: " + str($"/root/Main/Player".motion.x)
-	text += "\nPlayer.motion.y: " + str($"/root/Main/Player".motion.y)
-	text += "\nPlayer animation: " + $"/root/Main/Player".get_node("AnimationPlayer").current_animation
-	text += "\nPlayer next to wall: " + str($"/root/Main/Player".next_to_wall())
-	text += "\nland_timer: " + str($"/root/Main/Player".land_timer)
-	text += "\nceiling_cling_timer: " + str($"/root/Main/Player".ceiling_cling_timer)
-	text += "\nceiling_clinging: " + str($"/root/Main/Player".ceiling_clinging)
-	text += "\nceiling_cling_buffer: " + str($"/root/Main/Player".ceiling_cling_buffer)
-	text += "\nwall_hit_timer: " + str($"/root/Main/Player".wall_hit_timer)
+#	if not delta == 0: text = "fps: " + str(1/delta)
+#	text += "\nPlayer.motion.x: " + str($"/root/Main/Player".motion.x)
+#	text += "\nPlayer.motion.y: " + str($"/root/Main/Player".motion.y)
+#	text += "\nPlayer animation: " + $"/root/Main/Player".get_node("AnimationPlayer").current_animation
+#	text += "\nPlayer next to wall: " + str($"/root/Main/Player".next_to_wall())
+#	text += "\nland_timer: " + str($"/root/Main/Player".land_timer)
+#	text += "\nceiling_cling_timer: " + str($"/root/Main/Player".ceiling_cling_timer)
+#	text += "\nceiling_clinging: " + str($"/root/Main/Player".ceiling_clinging)
+#	text += "\nceiling_cling_buffer: " + str($"/root/Main/Player".ceiling_cling_buffer)
+#	text += "\nwall_hit_timer: " + str($"/root/Main/Player".wall_hit_timer)
+	if not Global.started:
+		text = "time: 0 seconds"
+	elif Global.end:
+		text = ""
+	else:
+		text = "time: " + str(float(OS.get_ticks_msec() - Global.start_time) / 1000) + " seconds"
+

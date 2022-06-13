@@ -1,15 +1,20 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://neighbor_animations.png" type="Texture" id=1]
 [ext_resource path="res://Player.gd" type="Script" id=2]
+[ext_resource path="res://jump.mp3" type="AudioStream" id=3]
+[ext_resource path="res://ground.mp3" type="AudioStream" id=4]
+[ext_resource path="res://ceiling push.mp3" type="AudioStream" id=5]
+[ext_resource path="res://fall.wav" type="AudioStream" id=6]
+[ext_resource path="res://portal.wav" type="AudioStream" id=7]
 
-[sub_resource type="Curve" id=15]
+[sub_resource type="Curve" id=1]
 _data = [ Vector2( 0, 1 ), 0.0, -0.205195, 0, 0, Vector2( 1, 0 ), -4.14949, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=16]
-curve = SubResource( 15 )
+[sub_resource type="CurveTexture" id=2]
+curve = SubResource( 1 )
 
-[sub_resource type="ParticlesMaterial" id=14]
+[sub_resource type="ParticlesMaterial" id=3]
 emission_shape = 1
 emission_sphere_radius = 1.25
 flag_disable_z = true
@@ -29,16 +34,15 @@ angle = 100.0
 angle_random = 1.0
 scale = 1.5
 scale_random = 1.0
-scale_curve = SubResource( 16 )
+scale_curve = SubResource( 2 )
 color = Color( 0.196078, 0.341176, 1, 1 )
 hue_variation = 0.07
 hue_variation_random = 1.0
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 17.4967, 17.6848 )
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 16.8672, 16.7576 )
 
-[sub_resource type="Animation" id=2]
-resource_name = "blink"
+[sub_resource type="Animation" id=5]
 step = 0.0416667
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
@@ -53,7 +57,7 @@ tracks/0/keys = {
 "values": [ 9 ]
 }
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=6]
 length = 5.0
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
@@ -68,8 +72,7 @@ tracks/0/keys = {
 "values": [ 26, 27 ]
 }
 
-[sub_resource type="Animation" id=4]
-resource_name = "ceiling fall"
+[sub_resource type="Animation" id=7]
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
 tracks/0/interp = 1
@@ -83,7 +86,7 @@ tracks/0/keys = {
 "values": [ 30 ]
 }
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=8]
 loop = true
 step = 0.0416667
 tracks/0/type = "value"
@@ -99,7 +102,7 @@ tracks/0/keys = {
 "values": [ 15 ]
 }
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=9]
 step = 0.0416667
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
@@ -114,7 +117,7 @@ tracks/0/keys = {
 "values": [ 8 ]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=10]
 loop = true
 step = 0.0416667
 tracks/0/type = "value"
@@ -130,7 +133,7 @@ tracks/0/keys = {
 "values": [ 14 ]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=11]
 length = 0.166667
 step = 0.0416667
 tracks/0/type = "value"
@@ -146,7 +149,7 @@ tracks/0/keys = {
 "values": [ 16 ]
 }
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=12]
 length = 0.458333
 loop = true
 step = 0.0416667
@@ -163,7 +166,7 @@ tracks/0/keys = {
 "values": [ 0, 1, 1, 2, 3, 4, 5, 5, 6, 7, 7 ]
 }
 
-[sub_resource type="Animation" id=10]
+[sub_resource type="Animation" id=13]
 length = 0.25
 loop = true
 step = 0.0416667
@@ -180,7 +183,7 @@ tracks/0/keys = {
 "values": [ 10, 11, 11, 12, 13, 13 ]
 }
 
-[sub_resource type="Animation" id=11]
+[sub_resource type="Animation" id=14]
 length = 0.458333
 loop = true
 step = 0.0416667
@@ -197,7 +200,7 @@ tracks/0/keys = {
 "values": [ 18, 19, 19, 20, 21, 22, 23, 23, 24, 25, 25 ]
 }
 
-[sub_resource type="Animation" id=12]
+[sub_resource type="Animation" id=15]
 step = 0.0166667
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
@@ -212,7 +215,7 @@ tracks/0/keys = {
 "values": [ 29, 29, 28, 28 ]
 }
 
-[sub_resource type="Animation" id=13]
+[sub_resource type="Animation" id=16]
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
 tracks/0/interp = 1
@@ -239,19 +242,19 @@ lifetime = 0.5
 one_shot = true
 explosiveness = 1.0
 local_coords = false
-process_material = SubResource( 14 )
+process_material = SubResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 2.52783, -5.28818 )
 scale = Vector2( 0.098893, 0.098893 )
 texture = ExtResource( 1 )
 hframes = 31
-frame = 29
+frame = 9
 region_rect = Rect2( 6126.72, -2.74649, 47.9341, 3.9945 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 1.88443, -1.84026 )
-shape = SubResource( 1 )
+position = Vector2( 2.08286, -2.43554 )
+shape = SubResource( 4 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
@@ -264,15 +267,36 @@ drag_margin_top = 0.0
 drag_margin_bottom = 0.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/blink = SubResource( 2 )
-anims/ceiling = SubResource( 3 )
-"anims/ceiling fall" = SubResource( 4 )
-anims/fall = SubResource( 5 )
-anims/idle = SubResource( 6 )
-anims/jump = SubResource( 7 )
-anims/land = SubResource( 8 )
-anims/run = SubResource( 9 )
-anims/skid = SubResource( 10 )
-anims/walk = SubResource( 11 )
-"anims/wall hit" = SubResource( 12 )
-"anims/wall slide" = SubResource( 13 )
+anims/blink = SubResource( 5 )
+anims/ceiling = SubResource( 6 )
+"anims/ceiling fall" = SubResource( 7 )
+anims/fall = SubResource( 8 )
+anims/idle = SubResource( 9 )
+anims/jump = SubResource( 10 )
+anims/land = SubResource( 11 )
+anims/run = SubResource( 12 )
+anims/skid = SubResource( 13 )
+anims/walk = SubResource( 14 )
+"anims/wall hit" = SubResource( 15 )
+"anims/wall slide" = SubResource( 16 )
+
+[node name="JumpSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+volume_db = -16.0
+pitch_scale = 1.1
+
+[node name="DeathSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+volume_db = -10.0
+pitch_scale = 1.1
+
+[node name="CeilingFallSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+pitch_scale = 0.8
+
+[node name="ThudSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+pitch_scale = 1.52
+
+[node name="PortalSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )

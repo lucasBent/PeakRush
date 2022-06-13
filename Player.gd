@@ -24,6 +24,7 @@ var previous = Vector2(0, 0)
 
 func _ready():
 	position = start_position
+	if get_tree().current_scene.name != "Main": $PortalSound.play()
 
 func _physics_process(delta):
 	if (not ceiling_clinging or (ceiling_clinging and not ceiling_cling_timer > 0)) and ceiling_cling_buffer > 0: ceiling_cling_buffer -= 1
@@ -56,6 +57,9 @@ func _physics_process(delta):
 
 
 func _process(_delta):
+	if Global.end:
+		motion.x = 0
+		motion.y = 0
 	if is_on_floor():
 		ceiling_fall = false
 		ceiling_cling_timer = 15
@@ -64,46 +68,61 @@ func _process(_delta):
 		motion.y = 0
 		jumping = false
 		wall_jumping = false
-		if previous.y > 800: land_timer = 5
-		if abs(previous.x) > x_speed * 6 and abs(motion.x) < x_speed: wall_hit_timer = 5
+		if previous.y > 800:
+			land_timer = 5
+			$ThudSound.play()
+		if abs(previous.x) > x_speed * 6 and abs(motion.x) < x_speed:
+			wall_hit_timer = 5
+			$ThudSound.play()
 		snap = true
 		if Input.is_action_pressed("ui_up") and snap and land_timer == 0 and wall_hit_timer == 0:
 			jumping = true
+			$JumpSound.play()
 			snap = false
 			var jump_multiplier = abs(motion.x) / 415
 			if jump_multiplier < 1: jump_multiplier = 1
 			motion.y = -jump_height * jump_multiplier
 	elif Input.is_action_pressed("ui_up") and $AnimationPlayer.current_animation == "wall slide" and ((Input.is_action_pressed("ui_right") and next_to_wall_right()) or (Input.is_action_pressed("ui_left") and next_to_wall_left())):
 		wall_jumping = true
+		$JumpSound.play()
 		snap = false
 		motion.y = -1.25 * jump_height
 		if $Sprite.scale.x > 0: motion.x = max_x_speed * -1
 		else: motion.x = max_x_speed
 		
+	if Input.is_action_pressed("ui_right") and not Input.is_action_pressed("ui_up") and next_to_wall_right():
+		motion.x = 0
+	if Input.is_action_pressed("ui_left") and not Input.is_action_pressed("ui_up") and next_to_wall_left():
+		motion.x = 0
+		
 	cap_motion()
-	var snap_vector = Vector2(0, 200) if snap else Vector2()
+	var snap_vector = Vector2(0, 1) if snap else Vector2()
 	previous = motion
 	
 	if on_ceiling() and Input.is_action_pressed("ui_up") and ceiling_cling_timer > 0:
 		ceiling_clinging = true
 		ceiling_cling_buffer = 10
-	if not on_ceiling() or (not Input.is_action_pressed("ui_up") and not ceiling_cling_buffer > 0) or (not ceiling_cling_buffer > 0 and not ceiling_cling_timer > 0):
+	if not on_ceiling() or (not Input.is_action_pressed("ui_up") and not ceiling_cling_buffer > 9) or (not ceiling_cling_buffer > 0 and not ceiling_cling_timer > 0):
 		ceiling_clinging = false
 		ceiling_cling_buffer = 0
 	if ceiling_clinging: motion.y = 0
 	if ceiling_clinging and not Input.is_action_pressed("ui_up"): ceiling_cling_timer = 0
 	if ceiling_clinging and Input.is_action_pressed("ui_down"):
 		ceiling_fall = true
+		$CeilingFallSound.play()
 		motion.y = 800
 		ceiling_clinging = false
 		ceiling_cling_buffer = 0
 	movement = move_and_slide_with_snap(motion, snap_vector, Vector2.UP, true, 4, 0.9, false)
+	
 	motion.y = movement.y
 	update_animation()
 	if movement.x == 0: motion.x = 0
 	
 	if position.y > 1000:
 		position = start_position
+		Global.deaths += 1
+		$DeathSound.play()
 		motion.x = 0
 		motion.y = 0
 
@@ -152,7 +171,7 @@ func update_animation():
 				$AnimationPlayer.play("idle")
 	else:
 		if motion.y > 30:
-			if (Input.is_action_pressed("ui_left") or Input.is_action_pressed("ui_right")) and next_to_wall():
+			if (Input.is_action_pressed("ui_left") or Input.is_action_pressed("ui_right")) and next_to_wall() and $AnimationPlayer.current_animation != "ceiling fall" and $AnimationPlayer.current_animation != "ceiling":
 				if not $AnimationPlayer.current_animation == "wall slide": motion.y *= 0.4
 				$AnimationPlayer.play("wall slide")
 			elif ceiling_fall: $AnimationPlayer.play("ceiling fall")
@@ -189,10 +208,24 @@ func walk_or_run():
 	if abs(motion.x) < 300:
 		if $AnimationPlayer.get_current_animation() == "run":
 			 current_pos = $AnimationPlayer.get_current_animation_position()
-		$AnimationPlayer.play("walk", -1, abs(motion.x/max_x_speed)+0.3)
+		if not next_to_wall():
+			$AnimationPlayer.play("walk", -1, abs(motion.x/max_x_speed)+0.3)
 		if current_pos != 0: $AnimationPlayer.advance(current_pos)
 	else:
 		if $AnimationPlayer.get_current_animation() == "walk":
 			 current_pos = $AnimationPlayer.get_current_animation_position()
 		$AnimationPlayer.play("run", -1, abs(motion.x/max_x_speed))
 		if current_pos != 0: $AnimationPlayer.advance(current_pos)
+
+
+func _on_End_body_entered(body):
+	if get_tree().current_scene.name == "Main":
+		get_tree().change_scene("res://Level 2.tscn")
+	elif get_tree().current_scene.name == "Level 2":
+		get_tree().change_scene("res://Level 3.tscn")
+	elif get_tree().current_scene.name == "Level 3":
+		position = Vector2(position.x, position.y - 2200)
+		$PortalSound.play()
+		visible = false
+		Global.end = true
+		get_node("/root/Level 3/CanvasLayer/EndScreen").end()
