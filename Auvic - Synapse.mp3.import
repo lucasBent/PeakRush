@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Auvic - Synapse.mp3-ca6a497789b5dc446d8c9c5a3e40d65a.mp3str"
+
+[deps]
+
+source_file="res://Auvic - Synapse.mp3"
+dest_files=[ "res://.import/Auvic - Synapse.mp3-ca6a497789b5dc446d8c9c5a3e40d65a.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

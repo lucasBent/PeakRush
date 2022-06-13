@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/ground.mp3-84b4ee53dfc403b5e525e3da59b000c2.mp3str"
+
+[deps]
+
+source_file="res://ground.mp3"
+dest_files=[ "res://.import/ground.mp3-84b4ee53dfc403b5e525e3da59b000c2.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

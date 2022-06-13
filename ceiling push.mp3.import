@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/ceiling push.mp3-e4fe78b61426b7f4dc32bdfbd9f0deda.mp3str"
+
+[deps]
+
+source_file="res://ceiling push.mp3"
+dest_files=[ "res://.import/ceiling push.mp3-e4fe78b61426b7f4dc32bdfbd9f0deda.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0
